@@ -1,0 +1,60 @@
+﻿@using BlogProject.Models
+@model IEnumerable<BlogPost>
+
+<!-- Page Header -->
+<header class="masthead" style="background-image:url('/Images/home-bg.jpg')">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <div class="site-heading">
+                    <h1>Clean Blog</h1>
+                    <span class="subheading">Blog Post Index</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+            @foreach (var blogPost in Model)
+            {
+                <div class="post-preview">
+                    <a href=@Url.Action("Details", "BlogPosts", new { id = blogPost.Id})>
+                        <h2 class="post-title">
+                            @blogPost.Title
+                        </h2>
+                        <h3 class="post-subtitle">
+                            @blogPost.Abstract
+                        </h3>
+                    </a>
+                    <p class="post-meta">
+                        Posted by
+                        @Html.ActionLink("A Name", "About", "Home")
+                        on @blogPost.Created.ToString("MMM dd, yyyy")
+                    </p>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col">
+                        @*@Html.ActionLink("Edit", "Edit", "BlogPosts", new { id = (int?)blogPost.Id }, new { @class = "btn btn-primary btn-sm" })*@
+                        @Html.ActionLink("Edit", "Edit", "BlogPosts", new { slug = (string)blogPost.Slug }, new { @class = "btn btn-primary btn-sm" })
+                    </div>
+                    <div class="col">
+                        @Html.ActionLink("Details", "Details", "BlogPosts", new { slug = (string)blogPost.Slug }, new { @class="btn btn-primary btn-sm"})
+                    </div>
+                    <div class="col">
+                        @Html.ActionLink("Delete", "Delete", "BlogPosts", new { slug = (string)blogPost.Slug }, new { @class="btn btn-primary btn-sm"})
+                    </div>
+                </div>
+                <hr />
+            }
+            <!-- Pager -->
+            <div class="clearfix">
+                <a class="btn btn-primary float-right" href="#">Older Posts &rarr;</a>
+            </div>
+        </div>
+    </div>
+</div>

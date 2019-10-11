@@ -1,0 +1,36 @@
+﻿@model BlogProject.Models.BlogPost
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<!-- Page Header -->
+<header class="masthead" style="background-image: url('img/post-bg.jpg')">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <div class="post-heading">
+                    <h1>@Model.Title</h1>
+                    <h2 class="subheading">@Model.Abstract</h2>
+                    <span class="meta">
+                        Posted by
+                        @Html.ActionLink("A Name","About","Home")
+                        on @Model.Created.ToString("MMM dd, yyyy")
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                @Html.Raw(Model.BlogPostBody)
+            </div>
+        </div>
+    </div>
+</article>
