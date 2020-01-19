@@ -1,28 +1,5 @@
 ﻿@model BlogProject.Models.BlogPost
 
-@{
-    ViewBag.Title = "Details";
-}
-
-<!-- Page Header -->
-<header class="masthead" style="background-image: url('img/post-bg.jpg')">
-    <div class="overlay"></div>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-md-10 mx-auto">
-                <div class="post-heading">
-                    <h1>@Model.Title</h1>
-                    <h2 class="subheading">@Model.Abstract</h2>
-                    <span class="meta">
-                        Posted by
-                        @Html.ActionLink("A Name","About","Home")
-                        on @Model.Created.ToString("MMM dd, yyyy")
-                    </span>
-                </div>
-            </div>
-        </div>
-    </div>
-</header>
 
 <!-- Post Content -->
 <article>
@@ -34,3 +11,69 @@
         </div>
     </div>
 </article>
+
+<hr style="border:2px dashed blue" />
+
+@*// Section 1 to control comments*@
+@if (User.Identity.IsAuthenticated)
+{
+    <div id="addComment">
+        @using (Html.BeginForm("Create", "Comments", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            @Html.Hidden("BlogPostId", Model.Id)
+            <div class="row">
+                <div class="offset-3 col-md-6">
+                    @Html.TextArea("CommentBody", new { row = 5, cols = 100, placeholder = "Add Comment", @id = "RTE" })
+                </div>
+            </div>
+            <div class="row">
+                <div class="offset-3 col-md-3">
+                    <button type="submit" class="btn btn-dark">Add Comment</button>
+                </div>
+            </div>
+        }
+    </div>
+}
+@*// Section 2 to list comments in reverse order*@
+<hr style="border:2px dashed blue" />
+@foreach (var comment in Model.Comments.OrderByDescending(c => c.Created))
+{
+    <div class="container md-3">
+        <div class="media">
+            @*<img src="~Images/anonymous_user.jfif" class="align-self-start mr-3" style="width:60px" />*@
+            <div class="row">
+                <div class="media-body">
+                <h4>
+                    By: @comment.Author.DisplayName
+                    On: @comment.Created.ToString("MMM dd, yyyy")
+                </h4>
+                @Html.Raw(comment.CommentBody)
+            </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col offset-2">
+                    @Html.ActionLink("Edit", "Edit", "Comments", new { id = (int)comment.Id }, null)
+                </div>
+                <div class="col">
+                    @Html.ActionLink("Delete", "Delete", "Comments", new { id = (int)comment.Id }, null)
+                </div>
+            </div>
+            <hr />
+        </div>
+    </div>
+}
+<!-- Bootstrap core JavaScript -->
+<script src="~/Scripts/jquery.min.js"></script>
+<!-- Custom scripts for this template -->
+<script src="~/Scripts/clean-blog.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Set background image of a div on load
+        var imageUrl = "/Images/detail-bg.jpg";
+        $(".masthead").css("background-image", "url(" + imageUrl + ")");
+        $('#topText').text("@Model.Title");
+        $('#subText').text("@Model.Abstract");
+    });
+</script>

@@ -267,6 +267,9 @@ header.masthead .post-heading .meta a {
   }
 }
 
+.post-preview{
+    color:#343a40
+}
 .post-preview > a {
   color: #212529;
 }

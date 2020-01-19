@@ -1,20 +1,8 @@
-﻿@using BlogProject.Models
-@model IEnumerable<BlogPost>   
-    
-<!-- Page Header -->
-<header class="masthead" style="background-image:url('/Images/home-bg.jpg')">
-    <div class="overlay"></div>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-md-10 mx-auto">
-                <div class="site-heading">
-                    <h1>Clean Blog</h1>
-                    <span class="subheading">Home Index</span>
-                </div>
-            </div>
-        </div>
-    </div>
-</header>
+﻿@using BlogProject.Models;
+@using PagedList;
+@using PagedList.Mvc;
+
+@model IPagedList<BlogPost>
 
 <div class="container">
     <div class="row">
@@ -22,7 +10,7 @@
             @foreach (var blogPost in Model)
             {
                 <div class="post-preview">
-                    <a href=@Url.Action("Details", "BlogPosts", new { id = blogPost.Id})>
+                    <a href=@Url.Action("Details", "BlogPosts", new { slug = (string)blogPost.Slug })>
                         <h2 class="post-title">
                             @blogPost.Title
                         </h2>
@@ -30,18 +18,22 @@
                             @blogPost.Abstract
                         </h3>
                     </a>
+                    @if (blogPost.ImagePath != null)
+                    {
+                        <img class="img-responsive" src="@blogPost.ImagePath" alt="" />
+                    }
                     <p class="post-meta">
                         Posted by
-                        @Html.ActionLink("Homey D Clown", "About", "Home")
+                        @Html.ActionLink("Andrew", "About", "Home")
                         on @blogPost.Created.ToString("MMM dd, yyyy")
                     </p>
                 </div>
                 <hr>
             }
             <!-- Pager -->
-            <div class="clearfix">
-                <a class="btn btn-primary float-right" href="#">Older Posts &rarr;</a>
-            </div>
+            Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+            @Html.PagedListPager(Model, page => Url.Action("Index", new { page, searchStr = ViewBag.Search }))
         </div>
     </div>
+</div>
 </div>

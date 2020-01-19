@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace BlogProject.Models
 {
@@ -14,6 +15,7 @@ namespace BlogProject.Models
         public DateTime Created { get; set; }
         public DateTime? Updated { get; set; }
         [Display(Name="Comment Body")]
+        [AllowHtml]
         public string CommentBody { get; set; }
         public string UpdateReason { get; set; }
         

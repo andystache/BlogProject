@@ -7,10 +7,10 @@
 <h2>Create</h2>
 
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>Comment</h4>
         <hr />
@@ -50,7 +50,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.CommentBody, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.CommentBody, new { htmlAttributes = new { @class = "form-control", id="RTE" } })
+                @Html.EditorFor(model => model.CommentBody, new { htmlAttributes = new { @class = "form-control", id = "RTE" } })
                 @Html.ValidationMessageFor(model => model.CommentBody, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -78,3 +78,6 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }
+<script>
+        $(function () { tinymce.init({ selector: '#RTE' }) });
+</script>

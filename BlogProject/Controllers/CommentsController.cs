@@ -7,9 +7,11 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using BlogProject.Models;
+using Microsoft.AspNet.Identity;
 
 namespace BlogProject.Controllers
 {
+    [RequireHttps]
     public class CommentsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -22,13 +24,13 @@ namespace BlogProject.Controllers
         }
 
         // GET: Comments/Details/5
-        public ActionResult Details(int? id)
+        public ActionResult Details(string slug)
         {
-            if (id == null)
+            if (slug == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Comment comment = db.Comments.Find(id);
+            Comment comment = db.Comments.Find(slug);
             if (comment == null)
             {
                 return HttpNotFound();
@@ -50,17 +52,20 @@ namespace BlogProject.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,BlogPostID,AuthorId,Created,Updated,CommentBody,UpdateReason")] Comment comment)
+        public ActionResult Create([Bind(Include = "Id,BlogPostID,CommentBody")] Comment comment)
         {
             if (ModelState.IsValid)
             {
+                comment.Created = DateTime.Now;
+                comment.AuthorId = User.Identity.GetUserId();
                 db.Comments.Add(comment);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                //return RedirectToAction("Index");
+                var slug = db.BlogPosts.Find(comment.BlogPostID).Slug;
+                return RedirectToAction("Details", "BlogPosts", new { slug });
             }
 
-            ViewBag.AuthorId = new SelectList(db.Users, "Id", "FirstName", comment.AuthorId);
-            ViewBag.BlogPostID = new SelectList(db.BlogPosts, "Id", "Title", comment.BlogPostID);
+
             return View(comment);
         }
 

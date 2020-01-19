@@ -5,30 +5,44 @@
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
+    <meta name="description" content="This is the coding blog of Coder Foundry TA/.NET Developer Andrew Russell">
     <meta name="author" content="">
 
-    <title>Clean Blog - Start Bootstrap Theme</title>
+    <title>Andrew's Blog</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <!-- Custom styles for this template -->
+    <link href="~/Content/clean-blog.css" rel="stylesheet" />
+    <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
     <!-- Custom fonts for this template -->
     <link href="~/fonts/all.min.css" rel="stylesheet" />
     <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
     <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
 
-    <!-- Custom styles for this template -->
-    <link href="~/Content/clean-blog.min.css" rel="stylesheet" />
 
 </head>
 
 <body>
+    <!-- Page Header -->
+    <header class="masthead" style="background-image:url('/Images/home-bg.jpg')">
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-md-10 mx-auto">
+                    <div class="site-heading">
+                        <h1 id="topText">Andrew's Blog</h1>
+                        <span class="subheading" id="subText">A record of development and random thoughts</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
 
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
         <div class="container">
-            <a class="navbar-brand" href="index.html">Start Bootstrap</a>
             <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                 Menu
                 <i class="fas fa-bars"></i>
@@ -36,19 +50,46 @@
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
+                        @using (Html.BeginForm("Index", "BlogPosts", FormMethod.Get, htmlAttributes: new { @class = "form", id = "app" }))
+                        {
+                            <input id="searchStr" name="searchStr" class="input-block-level" type="text" placeholder="Search" />
+                            <i class="fa fa-search" id="searchIcon" aria-hidden="true"></i>
+                        }
+                    </li>
+                    <li class="nav-item">
                         @Html.ActionLink("Home", "Index", "Home", null, new { @class = "nav-link" })
                     </li>
                     <li class="nav-item">
                         @Html.ActionLink("About", "About", "Home", null, new { @class = "nav-link" })
                     </li>
-                    @if(User.IsInRole("Admin"))
-                        { 
                     <li class="nav-item">
-                        @Html.ActionLink("Create Post", "Create", "BlogPosts", null, new { @class = "nav-link" })
+                        @Html.ActionLink("Contact", "Contact", "Home", null, new { @class = "nav-link" })
                     </li>
+                    @if (User.Identity.IsAuthenticated)
+                    {
                     <li class="nav-item">
-                        @Html.ActionLink("All Posts", "Index", "BlogPosts", null, new { @class = "nav-link" })
-                    </li>}
+                        @Html.ActionLink("Logout", "LogOff", "Account", null, new { @class = "nav-link" })
+                    </li>
+                    if (User.IsInRole("Admin"))
+                    {
+                        <li class="nav-item">
+                            @Html.ActionLink("Create Post", "Create", "BlogPosts", null, new { @class = "nav-link" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("All Posts", "Index", "BlogPosts", null, new { @class = "nav-link" })
+                        </li>
+
+                    }
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            @Html.ActionLink("Login", "Login", "Account", null, new { @class = "nav-link" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Register", "Register", "Account", null, new { @class = "nav-link" })
+                        </li>
+                    }
                 </ul>
             </div>
         </div>
@@ -92,7 +133,7 @@
                             </a>
                         </li>
                     </ul>
-                    <p class="copyright text-muted">Copyright &copy; Your Website 2019</p>
+                    <p class="copyright text-muted">Copyright &copy; Andrew Russell 2020</p>
                 </div>
             </div>
         </div>
@@ -108,8 +149,12 @@
     <script src="~/Scripts/tinymce/jquery.tinymce.min.js"></script>
     <script>
         $(function () { tinymce.init({ selector: '#RTE' }) });
+        $("#searchStr").hide();
+        $("#searchIcon").click(function () {
+            $("#searchStr").toggle();
+        });
     </script>
-    @RenderSection("scripts", required:false)
+    @RenderSection("scripts", required: false)
 </body>
 
 </html>

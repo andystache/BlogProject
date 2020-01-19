@@ -42,7 +42,7 @@ namespace BlogProject.Migrations
                     FirstName = "Andrew",
                     LastName = "Russell",
                     DisplayName = "The Dev",
-                }, "Abc&123!"); //Password
+                }, "Abc&123!") ; //Password
             }
 
             if (!context.Users.Any(u => u.Email == "JasonTwichell@Mailinator.com"))

@@ -10,6 +10,7 @@ using BlogProject.Models;
 
 namespace BlogProject.Controllers
 {
+    [RequireHttps]
     [Authorize]
     public class ManageController : Controller
     {
